@@ -1,4 +1,4 @@
-//<?php
+<?php
 // function fibonacci($num){
 //
 //
@@ -29,6 +29,7 @@
         return $sum;
     }
         echo fibonacciSum(10);
+    ?>
 
 
 
