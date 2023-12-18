@@ -29,7 +29,7 @@ $workers   = New Workers();
 $teacher   = New Teacher();
 $policeman = New Policeman();
 
-$teacher-> say();
+$policeman-> say();
 
 
 
