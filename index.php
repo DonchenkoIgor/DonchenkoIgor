@@ -67,17 +67,9 @@ if(!empty($_POST['email'])) {
                 echo 'Ви увійшли з'. ' '. $_POST['email'];
             }
             ?>
-
             <br>
         </div>
     <?php endif; ?>
-    <?php
-//    var_dump($_COOKIE);
-//    var_dump($_SESSION);
-    ?>
-    <?php
- //   if (empty($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']) :
-    ?>
     <form  method="post">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email</label>
@@ -97,7 +89,6 @@ if(!empty($_POST['email'])) {
         </div>
         <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
-
 </div>
 </body>
 </html>
