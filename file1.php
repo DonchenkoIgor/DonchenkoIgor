@@ -10,6 +10,7 @@
       file_put_contents($file, implode(PHP_EOL, $existingData));
       return $existingData;
   }
+
   function deleteByEmail($email){
       $file = 'data.txt';
       $existingData = [];

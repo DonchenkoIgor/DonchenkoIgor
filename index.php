@@ -20,7 +20,6 @@ setcookie('counter', $counter);
 setcookie('test' , 1);
 $_COOKIE['test'];
 
-
 if(!empty($_POST['email'])) {
     if (empty($_SESSION['user'])) {
         $_SESSION['user'] = [];
