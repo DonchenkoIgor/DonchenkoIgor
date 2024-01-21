@@ -11,7 +11,6 @@
       return $existingData;
   }
 
-
   function deleteByEmail($email){
       $file = 'data.txt';
       $existingData = [];

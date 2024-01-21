@@ -35,7 +35,6 @@ if(!empty($_POST['email'])) {
         'password' => $_POST['password'],
     ];
 
-
     $_SESSION['form_submited'] = true;
 }
 ?>
