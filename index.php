@@ -25,7 +25,6 @@ if(!empty($_POST['email'])) {
         $_SESSION['user'] = [];
     }
 
-
     $_SESSION['is_logged_in'] = true;
 
     $id = count($_SESSION['user']);
