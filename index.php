@@ -1,5 +1,12 @@
 <?php
+ob_start();
+?>
+<?php
 session_start();
+?>
+<?php
+require_once "file1.php";
+ob_end_clean();
 ?>
 <?php
 if(!isset($_COOKIE['counter'])){
@@ -29,6 +36,8 @@ if(!empty($_POST['email'])) {
         'email' => $_POST['email'],
         'password' => $_POST['password'],
     ];
+
+
     $_SESSION['form_submited'] = true;
 }
 ?>
@@ -63,11 +72,11 @@ if(!empty($_POST['email'])) {
         </div>
     <?php endif; ?>
     <?php
-    var_dump($_COOKIE);
-    var_dump($_SESSION);
+//    var_dump($_COOKIE);
+//    var_dump($_SESSION);
     ?>
     <?php
-    if (empty($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']) :
+ //   if (empty($_SESSION['is_logged_in']) || !$_SESSION['is_logged_in']) :
     ?>
     <form  method="post">
         <div class="mb-3">
@@ -88,7 +97,7 @@ if(!empty($_POST['email'])) {
         </div>
         <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
-    <?php endif; ?>
+
 </div>
 </body>
 </html>
