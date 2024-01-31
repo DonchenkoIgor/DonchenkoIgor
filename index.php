@@ -1,46 +1,65 @@
+<!DOCTYPE html>
 <?php
-ob_start();
-?>
-<?php
-session_start();
-?>
-<?php
-require_once "file1.php";
-ob_end_clean();
-?>
-<?php
-if(!isset($_COOKIE['counter'])){
-    $counter = 0;
-}else {
-    $counter = $_COOKIE['counter'];
+require_once('db.php');
+
+$con = getConnection();
+
+
+$usernameToCheck = 'user';
+
+if (isUserAuthorized($con, $usernameToCheck)) {
+    echo "Користувач зареєстрований<br>";
+} else {
+    echo "Користувача не знайдено<br>";
 }
-$counter++;
 
-setcookie('counter', $counter);
-setcookie('test' , 1);
-$_COOKIE['test'];
+$authenticatedUser = false;
+$userIsAdmin = false;
 
-if(!empty($_POST['email'])) {
-    if (empty($_SESSION['user'])) {
-        $_SESSION['user'] = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $authenticatedUser = authenticateUser($con, $username, $password);
+
+        if (!$authenticatedUser) {
+            echo "Невірні данні входу<br>";
+        } else {
+            $userIsAdmin = isAdmin($username);
+
+
+            if ($userIsAdmin) {
+                echo "Ви зареєстровані і маєте право видаляти повідомлення<br>";
+            } else {
+                echo "Ви зареєстровані, але не маєте права видаляти повідомлення<br>";
+            }
+        }
     }
 
-    $_SESSION['is_logged_in'] = true;
 
-    $id = count($_SESSION['user']);
-    $_SESSION['last_email'] = $id;
-
-    $_SESSION['user'] = [
-        'email' => $_POST['email'],
-        'password' => $_POST['password'],
-    ];
-
-    $_SESSION['form_submited'] = true;
+    if ($authenticatedUser && !empty($_POST['name']) && !empty($_POST['message'])) {
+        addNewMessage($con, htmlspecialchars($_POST['name']), htmlspecialchars($_POST['message']));
+    } elseif ($authenticatedUser) {
+        echo "Заповніть всі поля <br>";
+    } else {
+        echo "Ви не авторизовані <br>";
+    }
 }
-?>
-<!doctype html>
-<html lang="en">
 
+
+if (!empty($_GET['delete_message']) && $userIsAdmin) {
+    deleteMessage($con, $_GET['delete_message']);
+}
+
+$messages = getAllMessages($con);
+
+
+mysqli_close($con);
+?>
+
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -53,38 +72,64 @@ if(!empty($_POST['email'])) {
 </head>
 <body>
 <div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Chat
+        </div>
+        <ul class="list-group list-group-flush">
+            <?php foreach ($messages as $message) : ?>
+                <li class="list-group-item">
+                    <strong><?= $message['name'] ?></strong> at
+                    <?= $message['data'] ?> :
+                    <i><?= $message['message'] ?></i>
+                    <?php if ($userIsAdmin) : ?>
+                        <a href="?delete_message=<?= $message['id'] ?>">X</a>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
     <br><br>
-    <?php if(!empty($_POST['email'])) : ?>
-        <div class="alert alert-success" role="alert">
-            <?php
-            $email = $_POST['email'];
-            if(strlen(trim($email)) <= 3)
-                echo 'Такого email не існує';
-            else{
-                echo 'Ви увійшли з'. ' '. $_POST['email'];
-            }
-            ?>
-            <br>
-        </div>
-    <?php endif; ?>
-    <form  method="post">
+    <form method="post">
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <label for="exampleInputName" class="form-label">Name</label>
             <input
-                    type="email"
+                    type="text"
                     class="form-control"
-                    name="email"
+                    name="name"
+                <?php if ($authenticatedUser) echo 'value="' . htmlspecialchars($_POST['username']) . '"'; ?>
             >
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <label for="exampleInputMessage" class="form-label">Message</label>
             <input
-                    type="password"
+                    type="text"
                     class="form-control"
-                    name="password"
+                    name="message"
             >
         </div>
-        <button type="submit" class="btn btn-primary">Sign up</button>
+        <?php if ($authenticatedUser) : ?>
+            <input type="hidden" name="username" value="<?= htmlspecialchars($_POST['username']) ?>">
+            <input type="hidden" name="password" value="<?= htmlspecialchars($_POST['password']) ?>">
+        <?php else : ?>
+            <div class="mb-3">
+                <label for="exampleInputName" class="form-label">Username</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="username"
+                >
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword" class="form-label">Password</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        name="password"
+                >
+            </div>
+        <?php endif; ?>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 </body>
