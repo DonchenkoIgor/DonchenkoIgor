@@ -7,6 +7,7 @@ $con = getConnection();
 
 $usernameToCheck = 'user';
 
+
 if (isUserAuthorized($con, $usernameToCheck)) {
     echo "Користувач зареєстрований<br>";
 } else {
