@@ -7,6 +7,7 @@ $con = getConnection();
 
 $usernameToCheck = 'user';
 
+
 if (isUserAuthorized($con, $usernameToCheck)) {
     echo "Користувач зареєстрований<br>";
 } else {
@@ -68,9 +69,58 @@ mysqli_close($con);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous">
+    </script>
+    <script>
+        function appendComment(name, message) {
+            $("#list-of-messages").append(
+                "<li class='list-group-item'><strong>" + name + "</strong>: " + message + "</li>"
+            );
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                url: 'messages.php',
+                method: 'GET',
+                success: function (request) {
+                    console.log(request);
+                    if (request.data) {
+                        request.data.map(function (comment) {
+                            appendComment(comment.name, comment.message);
+                        });
+                    }
+                }
+            })
+        })
+
+        $("form").submit(function (event){
+            event.preventDefault();
+
+            let data1 = $(this).serialize();
+            let data2 = {
+                name: $(this).find('input[name="name"]').val(),
+                name: $(this).find('input[name="message"]').val(),
+                name: $(this).find('input[name="username"]').val(),
+                name: $(this).find('input[name="password"]').val(),
+            };
+            $.ajax({
+                url:'create_new_message.php',
+                method: 'POST',
+                data: data2,
+                success: function (request){
+                    appendComment(data2.name, data2.message, data2.username, data2.password);
+                    $("form").trigger("reset");
+                }
+            })
+        });
+    </script>
     <title>Form</title>
 </head>
 <body>
+<script>
+</script>
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
@@ -131,6 +181,3 @@ mysqli_close($con);
         <?php endif; ?>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-</div>
-</body>
-</html>
