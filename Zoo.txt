@@ -1,0 +1,38 @@
+CREATE TABLE `AnimalCare`(
+    `animal_care_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `animal_id` INT NOT NULL,
+    `employee_id` INT NOT NULL
+);
+CREATE TABLE `Animals`(
+    `animal_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `species` VARCHAR(255) NOT NULL,
+    `age` INT NOT NULL
+);
+CREATE TABLE `AnimalFeeding`(
+    `feeding_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `animal_id` INT NOT NULL,
+    `food_id` INT NOT NULL
+);
+CREATE TABLE `Employees`(
+    `employee_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `position` VARCHAR(255) NOT NULL,
+    `start_date` DATE NOT NULL,
+    `salary` DECIMAL(8, 2) NOT NULL
+);
+CREATE TABLE `AnimalFood`(
+    `food_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `brand` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(255) NOT NULL,
+    `unit` VARCHAR(255) NOT NULL
+);
+ALTER TABLE
+    `AnimalCare` ADD CONSTRAINT `animalcare_animal_id_foreign` FOREIGN KEY(`animal_id`) REFERENCES `Animals`(`animal_id`);
+ALTER TABLE
+    `AnimalFeeding` ADD CONSTRAINT `animalfeeding_animal_id_foreign` FOREIGN KEY(`animal_id`) REFERENCES `Animals`(`animal_id`);
+ALTER TABLE
+    `AnimalFeeding` ADD CONSTRAINT `animalfeeding_food_id_foreign` FOREIGN KEY(`food_id`) REFERENCES `AnimalFood`(`food_id`);
+ALTER TABLE
+    `AnimalCare` ADD CONSTRAINT `animalcare_employee_id_foreign` FOREIGN KEY(`employee_id`) REFERENCES `Employees`(`employee_id`);
