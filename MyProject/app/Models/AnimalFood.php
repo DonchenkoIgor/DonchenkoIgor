@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnimalFood extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'brand', 'type', 'unit'];
+
+    public function feedings()
+    {
+        return $this->hasMany(AnimalFeeding::class);
+    }
 }
