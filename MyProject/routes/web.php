@@ -17,12 +17,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('animals',
-    [\App\Http\Controllers\AnimalController::class, 'showAll']);
-
-Route::get('animals/{animal}',
-    [\App\Http\Controllers\AnimalController::class, 'showAnimalData']
-    )->name('animal.data');
+Route::prefix('zoo')->middleware('check.entity.parameter')->group(function (){
+   Route::get('/', function () {
+       return 'Main route';
+   });
+    Route::get('/animals',
+        [\App\Http\Controllers\AnimalController::class, 'showAll']);
+    Route::get('/employees',
+        [\App\Http\Controllers\EmployeeController::class, 'showAll']);
+    Route::get('/foods',
+        [\App\Http\Controllers\FoodController::class, 'showAll']);
+});
 
 
 
