@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Animal extends Model
 {
-    use HasFactory;
+    protected $table="animals";
+
+    public function data()
+    {
+        return $this->hasMany(AnimalData::class);
+    }
 }

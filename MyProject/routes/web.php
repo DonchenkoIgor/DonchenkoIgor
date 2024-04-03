@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('animals',
+    [\App\Http\Controllers\AnimalController::class, 'showAll']);
+
+Route::get('animals/{animal}',
+    [\App\Http\Controllers\AnimalController::class, 'showAnimalData']
+    )->name('animal.data');
+
+
+
