@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnimalCare extends Model
 {
-    protected $fillable = ['animal_id', 'employee_id'];
+    protected $table = "animal_care";
 
     public function animal()
     {

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    protected $fillable = ['name', 'position', 'start_date', 'salary'];
+    protected $table="employees";
 
-    public function cares()
+    public function data()
     {
-        return $this->hasMany(AnimalCare::class);
+        return $this->hasMany(EmployeeData::class);
     }
 }
