@@ -13,4 +13,9 @@ class Animal extends Model
     {
         return $this->hasMany(AnimalData::class);
     }
+
+    public function getDataCount()
+    {
+        return $this->data()->count();
+    }
 }
