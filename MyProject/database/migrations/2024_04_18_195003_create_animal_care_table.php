@@ -6,19 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('animal_care', function (Blueprint $table) {
-            $table->bigIncrements('animal_care_id');
+            $table->id();
+            $table->timestamps();
             $table->unsignedBigInteger('animal_id');
-            $table->unsignedBigInteger('employee_id');
-        });
-        Schema::table('animal_care', function (Blueprint $table){
-            $table->foreign('animal_id')->references('animal_id')->on('animals');
-            $table->foreign('employee_id')->references('employee_id')->on('employees');
+            $table->unsignedBigInteger('employees_id');
+
+            $table->foreign('animal_id')->references('id')->on('animals');
         });
     }
 

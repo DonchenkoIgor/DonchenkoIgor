@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('food_id');
         });
         Schema::table('animal_feeding', function (Blueprint $table){
-            $table->foreign('animal_id')->references('animal_id')->on('animals');
+            $table->foreign('animals_id')->references('animal_id')->on('animals');
             $table->foreign('food_id')->references('food_id')->on('animal_food');
         });
     }
